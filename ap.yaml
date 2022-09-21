@@ -1,0 +1,19 @@
+kind: AuthorizationPolicy
+apiVersion: security.istio.io/v1beta1
+metadata:
+  name: echo-server-ap
+  labels:
+    app: echo-server-ap
+spec:
+  selector:
+    matchLabels:
+      run: echo-server
+  rules:
+    - from:
+        - source:
+            requestPrincipals:
+              - 'go-idp-mock/*'
+    - to:
+        - operation:
+            paths:
+              - /bypass

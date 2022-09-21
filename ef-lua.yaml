@@ -1,0 +1,45 @@
+kind: EnvoyFilter
+apiVersion: networking.istio.io/v1alpha3
+metadata:
+  name: echo-server-ef
+spec:
+  workloadSelector:
+    labels:
+      run: echo-server
+  configPatches:
+    - applyTo: HTTP_FILTER
+      match:
+        context: SIDECAR_INBOUND
+        listener:
+          filterChain:
+            filter:
+              name: envoy.filters.network.http_connection_manager
+              subFilter:
+                name: envoy.filters.http.router
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.lua
+          typed_config:
+            '@type': type.googleapis.com/envoy.extensions.filters.http.lua.v3.Lua
+            inlineCode: |
+              function envoy_on_request(request_handle)
+                -- Doc https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/lua_filter
+                path = request_handle:headers():get(":path")
+                user_agent = request_handle:headers():get("user-agent")
+
+                local istio_authn = request_handle:streamInfo():dynamicMetadata():get("istio_authn")
+
+                if istio_authn then
+                  local claims = istio_authn["request.auth.claims"]
+                  if claims then
+                    user = claims["sub"][1]
+                    request_handle:logWarn("sub: "..user..", url: "..path..", ua: "..user_agent)
+                    request_handle:headers():replace("x-forwarded-user", user)
+                  else
+                    request_handle:logWarn("Unauthenticated request, url: "..path..", ua: "..user_agent)
+                  end
+                else
+                  request_handle:logWarn("Unauthenticated request, url: "..path..", ua: "..user_agent)
+                end
+              end

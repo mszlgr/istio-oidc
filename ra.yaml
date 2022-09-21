@@ -1,0 +1,13 @@
+kind: RequestAuthentication
+apiVersion: security.istio.io/v1beta1
+metadata:
+  name: echo-server-ra
+spec:
+  selector:
+    matchLabels:
+      run: echo-server
+  jwtRules:
+    - fromHeaders:
+        - name: jwt
+      issuer: "go-idp-mock"
+      jwksUri: "http://go-idp-mock.default/oauth2/v1/keys"
