@@ -9,5 +9,4 @@ kubectl run echo-server --image=ealen/echo-server --env ENABLE__ENVIRONMENT=fals
 kubectl expose pod echo-server --port=80 --name echo-server --type=NodePort
 
 # expose services
-minikube service go-idp-mock --url=true &
-minikube service echo-server --url=true &
+minikube service --all=true --url=true &
