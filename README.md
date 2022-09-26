@@ -15,4 +15,4 @@ Any identify provider that can issue JWT and exposes JWKS can be used. By defaul
 1. Play with `ap.yaml` AuthorizationPolicy, `ra.yaml` RequestAuthentication and `ef-lua.yaml` EnvoyFIlter objects. 
 
 ## Presentation
-This code was also used as a demo example during [BSides Krakow 2022](https://bsideskrakow.pl/). Presetantion it self can be found here.
+This code was also used as a demo example during [BSides Krakow 2022](https://bsideskrakow.pl/). Presetantion it self can be found (here)[presentation/Zero-Trust-With-Istio.pdf].
