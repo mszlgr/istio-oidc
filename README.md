@@ -14,3 +14,5 @@ Any identify provider that can issue JWT and exposes JWKS can be used. By defaul
 1. Run `./start.sh` script to create `go-idp-mock` and `echo-server` pods and expose them as service and creates port forwarding to localhost.
 1. Play with `ap.yaml` AuthorizationPolicy, `ra.yaml` RequestAuthentication and `ef-lua.yaml` EnvoyFIlter objects. 
 
+## Presentation
+This 
